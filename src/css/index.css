@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: 'Inter', sans-serif;
+  --font-caveat: 'Caveat', cursive;
+  --font-lora: 'Lora', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  /* Default body text is Inter Regular */
+  body {
+    @apply font-normal;
+  }
+}
+
+@layer components {
+  /* Heading styles - Inter Bold */
+  .heading-1 {
+    @apply font-bold;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.875rem;
+  }
+
+  .heading-2 {
+    @apply font-bold;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+  }
+
+  .heading-3 {
+    @apply font-bold;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+  }
+
+  /* UI text - Inter Regular/Medium */
+  .text-ui {
+    @apply font-medium;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Code/Labels - JetBrains Mono */
+  .text-code {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Serif text - Lora */
+  .text-serif {
+    font-family: 'Lora', serif;
+  }
+
+  /* Brand/Display - Caveat */
+  .text-brand {
+    font-family: 'Caveat', cursive;
+    @apply font-bold;
+  }
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+
+input[type=range] { accent-color: #2563eb; }

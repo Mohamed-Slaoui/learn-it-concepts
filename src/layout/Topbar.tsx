@@ -14,7 +14,7 @@ export function Topbar({ onBack, showBack = false, variant = 'simulator', concep
 
   return (
     <header
-      className="h-12 flex items-center px-4 gap-[10px] shrink-0 z-20 border-b"
+      className="h-14 flex items-center px-4 gap-[10px] shrink-0 z-20 border-b"
       style={{
         background: variant === 'landing' ? 'rgba(255,255,255,0.8)' : 'white',
         backdropFilter: variant === 'landing' ? 'blur(10px)' : undefined,
@@ -43,48 +43,43 @@ export function Topbar({ onBack, showBack = false, variant = 'simulator', concep
       <div className="w-[26px] h-[26px] bg-blue-600 rounded-[7px] flex items-center justify-center shrink-0">
         <span className="text-white text-[13px] font-extrabold">S</span>
       </div>
-      <span className="heading-3 text-slate-900 shrink-0 font-caveat">
+      <span className="heading-3 text-slate-900 shrink-0">
         SysViz
       </span>
-      <span
+      {/* <span
         className="text-slate-400 border border-slate-200 px-[7px] py-[2px] rounded text-[9px] tracking-[1px] shrink-0 text-code"
       >
         v0.1 · BETA
-      </span>
+      </span> */}
 
       {/* Concept identity (simulator mode) */}
       {concept && variant === 'simulator' && (
         <>
           <div className="w-px h-5 bg-slate-200 shrink-0 mx-1" />
-          <div className="flex flex-col justify-center leading-none shrink-0">
+
+          <div className="flex flex-1 flex-col gap-1 items-center justify-center leading-none shrink-0">
             <span
               className="heading-3 text-slate-900 leading-none"
             >
-              {concept.icon} {concept.label}
+              {concept.label}
             </span>
             <span
-              className="text-[8px] tracking-[2px] uppercase text-slate-400 mt-[2px] text-code"
+              className=" text-center text-[11px] text-slate-400 px-4 hidden md:block truncate text-serif"
+              style={{ fontStyle: 'italic' }}
             >
-              Interactive Simulator
+              Configure below and run a simulation
             </span>
           </div>
 
-          {/* Center subtitle */}
-          <span
-            className="flex-1 text-center text-[11px] text-slate-400 px-4 hidden md:block truncate text-serif"
-            style={{ fontStyle: 'italic' }}
-          >
-            Configure below and run a simulation
-          </span>
 
           {/* Stats */}
           {stats && (
             <div className="flex items-center gap-5 shrink-0">
               {([
-                ['Hits',   stats.hits,                    '#10b981'],
-                ['Misses', stats.misses,                  '#ef4444'],
-                ['Total',  stats.total,                   '#3b82f6'],
-                ['Last',   stats.ms ? `${stats.ms}ms` : '—', '#94a3b8'],
+                ['Hits', stats.hits, '#10b981'],
+                ['Misses', stats.misses, '#ef4444'],
+                ['Total', stats.total, '#3b82f6'],
+                ['Last', stats.ms ? `${stats.ms}ms` : '—', '#94a3b8'],
               ] as [string, string | number, string][]).map(([label, val, color]) => (
                 <div key={label} className="text-center leading-none">
                   <div className="heading-2" style={{ color, lineHeight: 1 }}>

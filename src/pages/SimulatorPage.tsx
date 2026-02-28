@@ -16,7 +16,7 @@ export function SimulatorPage({ conceptId, onBack }: SimulatorPageProps) {
   return (
     <SimulatorLayout conceptId={conceptId} stats={stats} onBack={onBack}>
       {conceptId === 'caching' && (
-        <CachingSimulator onStatsUpdate={setStats} onReset={() => setStats(DEFAULT_STATS)} />
+        <CachingSimulator conceptId={conceptId} onStatsUpdate={setStats} onReset={() => setStats(DEFAULT_STATS)} />
       )}
     </SimulatorLayout>
   );

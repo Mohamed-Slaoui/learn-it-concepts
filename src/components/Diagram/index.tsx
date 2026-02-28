@@ -16,11 +16,12 @@ const EDGES: Edge[] = [
 interface DiagramProps {
   activeStep: FlowStep | null;
   doneCount: number;
+  running: boolean;
   onStepComplete: () => void;
   stepDur: number;
 }
 
-export function Diagram({ activeStep, doneCount, onStepComplete, stepDur }: DiagramProps) {
+export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDur }: DiagramProps) {
   const wRef = useRef<HTMLDivElement>(null);
   const [sz, setSz] = useState({ w: 800, h: 400 });
 
@@ -41,7 +42,7 @@ export function Diagram({ activeStep, doneCount, onStepComplete, stepDur }: Diag
     () => ({
       app: { x: w * 0.12, y: h * 0.5 },
       server: { x: w * 0.5, y: h * 0.78 },
-      cache: { x: w * 0.5, y: h * 0.21 },
+      cache: { x: w * 0.5, y: h * 0.15 },
       db: { x: w * 0.88, y: h * 0.5 },
     }),
     [w, h],
@@ -72,7 +73,7 @@ export function Diagram({ activeStep, doneCount, onStepComplete, stepDur }: Diag
               label={isActive ? activeStep!.label : undefined}
               dot={isActive ? activeStep!.dot : undefined}
               animating={isActive}
-              dimmed={!isActive && doneCount > 0}
+              dimmed={false}
               onComplete={isActive ? onStepComplete : undefined}
               dur={stepDur}
             />

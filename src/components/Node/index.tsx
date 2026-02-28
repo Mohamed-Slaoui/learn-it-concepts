@@ -7,14 +7,22 @@ interface NodeProps {
   x: number;
   y: number;
   active: boolean;
+  dragging?: boolean;
+  onMouseDown?: (e: React.MouseEvent) => void;
 }
 
-export function Node({ id, x, y, active }: NodeProps) {
+export function Node({ id, x, y, active, dragging = false, onMouseDown }: NodeProps) {
   const c = NODE_CONFIG[id];
   return (
     <div
       className="absolute z-10"
-      style={{ left: x, top: y, transform: 'translate(-50%, -50%)' }}
+      style={{
+        left: x,
+        top: y,
+        transform: 'translate(-50%, -50%)',
+        cursor: dragging ? 'grabbing' : 'grab',
+      }}
+      onMouseDown={onMouseDown}
     >
       <div className="flex flex-col items-center gap-[7px]">
         <motion.div
@@ -40,6 +48,7 @@ export function Node({ id, x, y, active }: NodeProps) {
             alignItems: 'center',
             minWidth: 96,
             transition: 'border-color 0.3s',
+            filter: dragging ? 'drop-shadow(0 8px 12px rgba(0,0,0,0.15))' : 'none',
           }}
         >
           <c.Illus />
@@ -52,7 +61,7 @@ export function Node({ id, x, y, active }: NodeProps) {
             {c.label}
           </div>
           <div
-            className="mt-[2px] text-code"
+            className="mt-0.5 text-code"
             style={{
               fontSize: 9,
               color: '#94a3b8',

@@ -49,22 +49,14 @@ export function ArrowFlow({
     const sy = A.y + Math.sin(ang) * hh;
     const ex = B.x - Math.cos(ang) * hw;
     const ey = B.y - Math.sin(ang) * hh;
-    const mx = (sx + ex) / 2 + (sy - ey) * 0.18;
-    const my = (sy + ey) / 2 + (ex - sx) * 0.18;
-    const d = `M ${sx} ${sy} Q ${mx} ${my} ${ex} ${ey}`;
-    const aAng = Math.atan2(ey - my, ex - mx);
-    const aLen = 9;
+    const d = `M ${sx} ${sy} L ${ex} ${ey}`;
     const pLen = Math.hypot(ex - sx, ey - sy) * 1.12 + 10;
-    const t = 0.48;
-    const lx = (1 - t) ** 2 * sx + 2 * (1 - t) * t * mx + t * t * ex;
-    const ly = (1 - t) ** 2 * sy + 2 * (1 - t) * t * my + t * t * ey - 17;
+    const t = 0.5;
+    const lx = (1 - t) * sx + t * ex;
+    const ly = (1 - t) * sy + t * ey - 17;
     return {
       d,
-      sx, sy, ex, ey, mx, my, pLen, lx, ly,
-      ax1: ex - aLen * Math.cos(aAng - 0.45),
-      ay1: ey - aLen * Math.sin(aAng - 0.45),
-      ax2: ex - aLen * Math.cos(aAng + 0.45),
-      ay2: ey - aLen * Math.sin(aAng + 0.45),
+      sx, sy, ex, ey, pLen, lx, ly,
     };
   }, [A, B]);
 
@@ -87,7 +79,7 @@ export function ArrowFlow({
 
   if (!geo) return null;
 
-  const { d, ex, ey, ax1, ay1, ax2, ay2, pLen, lx, ly } = geo;
+  const { d, ex, ey, pLen, lx, ly } = geo;
   const lineCol = animating ? dot : '#cbd5e1';
   const op = dimmed ? 0.1 : 1;
   const dotR = 7;
@@ -118,15 +110,6 @@ export function ArrowFlow({
         strokeWidth={animating ? 2.5 : 1.5}
         strokeDasharray={animating ? undefined : '6 4'}
         style={{ transition: 'stroke 0.3s' }}
-      />
-
-      {/* Arrowhead */}
-      <path
-        d={`M${ax1} ${ay1} L${ex} ${ey} L${ax2} ${ay2}`}
-        fill="none"
-        stroke={lineCol}
-        strokeWidth={1.5}
-        strokeLinejoin="round"
       />
 
       {/* Animated dot */}

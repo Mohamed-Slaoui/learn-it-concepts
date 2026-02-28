@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect, useMemo } from 'react';
+import { useRef, useState, useLayoutEffect, useMemo, useCallback } from 'react';
 import type { FlowStep } from '../../types';
 import { Node } from '../Node';
 import { ArrowFlow } from '../ArrowFlow';
@@ -24,6 +24,30 @@ interface DiagramProps {
 export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDur }: DiagramProps) {
   const wRef = useRef<HTMLDivElement>(null);
   const [sz, setSz] = useState({ w: 800, h: 400 });
+  const [draggingNode, setDraggingNode] = useState<NodeId | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  const defaultPos = useMemo(
+    () => ({
+      app: { x: sz.w * 0.12, y: sz.h * 0.5 },
+      server: { x: sz.w * 0.5, y: sz.h * 0.78 },
+      cache: { x: sz.w * 0.5, y: sz.h * 0.15 },
+      db: { x: sz.w * 0.88, y: sz.h * 0.5 },
+    }),
+    [sz.w, sz.h],
+  );
+
+  const [posOverrides, setPosOverrides] = useState<Partial<Record<NodeId, { x: number; y: number }>>>({});
+
+  const pos = useMemo(
+    () => ({
+      app: posOverrides.app ?? defaultPos.app,
+      server: posOverrides.server ?? defaultPos.server,
+      cache: posOverrides.cache ?? defaultPos.cache,
+      db: posOverrides.db ?? defaultPos.db,
+    }),
+    [posOverrides, defaultPos],
+  );
 
   useLayoutEffect(() => {
     const el = wRef.current;
@@ -36,17 +60,46 @@ export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDu
     return () => ob.disconnect();
   }, []);
 
-  const { w, h } = sz;
-
-  const pos = useMemo(
-    () => ({
-      app: { x: w * 0.12, y: h * 0.5 },
-      server: { x: w * 0.5, y: h * 0.78 },
-      cache: { x: w * 0.5, y: h * 0.15 },
-      db: { x: w * 0.88, y: h * 0.5 },
-    }),
-    [w, h],
+  const handleNodeMouseDown = useCallback(
+    (nodeId: NodeId, e: React.MouseEvent) => {
+      e.preventDefault();
+      const nodePos = pos[nodeId];
+      setDraggingNode(nodeId);
+      setDragOffset({
+        x: e.clientX - nodePos.x,
+        y: e.clientY - nodePos.y,
+      });
+    },
+    [pos],
   );
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!draggingNode) return;
+      const containerRect = wRef.current?.getBoundingClientRect();
+      if (!containerRect) return;
+
+      let newX = e.clientX - containerRect.left - dragOffset.x;
+      let newY = e.clientY - containerRect.top - dragOffset.y;
+
+      // Add boundaries - clamp to container with some padding
+      const padding = 60;
+      newX = Math.max(padding, Math.min(newX, sz.w - padding));
+      newY = Math.max(padding, Math.min(newY, sz.h - padding));
+
+      setPosOverrides((prev) => ({
+        ...prev,
+        [draggingNode]: { x: newX, y: newY },
+      }));
+    },
+    [draggingNode, dragOffset, sz.w, sz.h],
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setDraggingNode(null);
+  }, []);
+
+  const { w, h } = sz;
 
   const activeNodes = new Set<string>();
   if (activeStep) {
@@ -55,9 +108,15 @@ export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDu
   }
 
   return (
-    <div ref={wRef} className="relative w-full h-full overflow-hidden">
+    <div
+      ref={wRef}
+      className="relative w-full h-full overflow-hidden select-none"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
       <svg
-        className="absolute top-0 left-0 w-full h-full overflow-visible"
+        className="absolute top-0 left-0 w-full h-full overflow-visible pointer-events-none"
         viewBox={`0 0 ${w} ${h}`}
       >
         {EDGES.map(([f, t]) => {
@@ -82,7 +141,15 @@ export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDu
       </svg>
 
       {(Object.entries(pos) as [NodeId, { x: number; y: number }][]).map(([id, p]) => (
-        <Node key={id} id={id} x={p.x} y={p.y} active={activeNodes.has(id)} />
+        <Node
+          key={id}
+          id={id}
+          x={p.x}
+          y={p.y}
+          active={activeNodes.has(id)}
+          dragging={draggingNode === id}
+          onMouseDown={(e) => handleNodeMouseDown(id, e)}
+        />
       ))}
     </div>
   );

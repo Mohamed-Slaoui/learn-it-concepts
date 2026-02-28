@@ -85,7 +85,7 @@ function ConceptCard({ concept, index, onClick }: { concept: ConceptMeta; index:
               className="text-[12px] font-semibold transition-colors duration-200 heading-3"
               style={{ color: hovered ? concept.color : '#94a3b8' }}
             >
-              Explore →
+              {/* Explore → */}
             </span>
           )}
         </div>

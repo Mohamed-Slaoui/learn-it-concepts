@@ -160,3 +160,45 @@ export function DBIllus() {
     </svg>
   );
 }
+
+export function LBIllus() {
+  return (
+    <svg width="72" height="64" viewBox="0 0 72 64" fill="none">
+      <defs>
+        <linearGradient id="lbBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#fef3c7" />
+          <stop offset="100%" stopColor="#fde68a" />
+        </linearGradient>
+        <linearGradient id="lbBar" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#fbbf24" />
+          <stop offset="50%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#fbbf24" />
+        </linearGradient>
+      </defs>
+
+      {/* Main body */}
+      <rect x="8" y="8" width="56" height="48" rx="8" fill="url(#lbBg)" stroke="#f59e0b" strokeWidth="2.5" />
+
+      {/* Balance beam visualization */}
+      <rect x="16" y="26" width="40" height="4" rx="2" fill="url(#lbBar)" />
+      <circle cx="36" cy="28" r="6" fill="#f59e0b" stroke="#92400e" strokeWidth="2" />
+
+      {/* Server indicators (left) */}
+      <rect x="14" y="18" width="6" height="4" rx="1" fill="#10b981" opacity="0.7" />
+      <rect x="22" y="18" width="6" height="4" rx="1" fill="#10b981" opacity="0.7" />
+      <rect x="30" y="18" width="6" height="4" rx="1" fill="#10b981" opacity="0.7" />
+
+      {/* Server indicators (right) */}
+      <rect x="44" y="36" width="6" height="4" rx="1" fill="#10b981" opacity="0.7" />
+      <rect x="52" y="36" width="6" height="4" rx="1" fill="#10b981" opacity="0.7" />
+      <rect x="36" y="36" width="6" height="4" rx="1" fill="#10b981" opacity="0.7" />
+
+      {/* Flow arrows */}
+      <path d="M 20 24 L 20 26 L 16 28 L 20 30 L 20 32" stroke="#d97706" strokeWidth="1.5" fill="none" opacity="0.6" />
+      <path d="M 52 24 L 52 26 L 56 28 L 52 30 L 52 32" stroke="#d97706" strokeWidth="1.5" fill="none" opacity="0.6" />
+
+      {/* Status indicator */}
+      <circle cx="36" cy="48" r="2.5" fill="#10b981" />
+    </svg>
+  );
+}

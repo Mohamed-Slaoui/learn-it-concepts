@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { SimulatorLayout } from '../layout/SimulatorLayout';
 import { CachingSimulator } from '../concepts/caching/CachingSimulator';
+import { LBSimulator } from '../concepts/load-balancer/LBSimulator';
 import { HelpModal } from '../components/HelpModal';
 import type { SimStats } from '../types';
 
@@ -20,6 +21,9 @@ export function SimulatorPage({ conceptId, onBack }: SimulatorPageProps) {
       <SimulatorLayout conceptId={conceptId} stats={stats} onBack={onBack} onHelp={() => setHelpOpen(true)}>
         {conceptId === 'caching' && (
           <CachingSimulator conceptId={conceptId} onStatsUpdate={setStats} onReset={() => setStats(DEFAULT_STATS)} />
+        )}
+        {conceptId === 'load-balancer' && (
+          <LBSimulator conceptId={conceptId} onStatsUpdate={setStats} onReset={() => setStats(DEFAULT_STATS)} />
         )}
       </SimulatorLayout>
 

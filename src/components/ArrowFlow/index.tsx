@@ -1,5 +1,4 @@
 import { useEffect, useRef, useMemo } from 'react';
-import type { NodeId } from '../../types';
 
 export interface NodePosition {
   x: number;
@@ -7,8 +6,8 @@ export interface NodePosition {
 }
 
 interface ArrowFlowProps {
-  from: NodeId;
-  to: NodeId;
+  from: string;
+  to: string;
   pos: Record<string, NodePosition>;
   label?: string;
   dot?: string;
@@ -79,7 +78,7 @@ export function ArrowFlow({
 
   if (!geo) return null;
 
-  const { d, ex, ey, pLen, lx, ly } = geo;
+    const { d, ex: _ex, ey: _ey, pLen, lx, ly } = geo;
   const lineCol = animating ? dot : '#cbd5e1';
   const op = dimmed ? 0.1 : 1;
   const dotR = 7;

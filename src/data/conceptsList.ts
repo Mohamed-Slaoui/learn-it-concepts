@@ -32,7 +32,7 @@ export const CONCEPTS: ConceptMeta[] = [
     id: 'load-balancer',
     label: 'Load Balancer',
     icon: '⚖️',
-    status: 'soon',
+    status: 'live',
     color: '#3b82f6',
     tagline: 'One entry point, many servers — traffic distributed intelligently.',
     what: 'A load balancer sits in front of your server fleet and routes each incoming request to the best available server. Round-robin, least-connections, or consistent hashing — it picks for you.',
@@ -40,7 +40,7 @@ export const CONCEPTS: ConceptMeta[] = [
       'When millions hit YouTube simultaneously, a load balancer fans traffic across thousands of servers. No single machine gets crushed. If one dies, traffic reroutes in milliseconds.',
     useCases: ['High-traffic web apps', 'Zero-downtime deployments', 'Geographic routing', 'Health check failover'],
     stat: 'Handle millions of req/sec',
-    overview: 'A load balancer distributes incoming network traffic across multiple servers.',
+    overview: 'A load balancer sits between clients and your server pool, routing each request to the best available backend. It monitors server health, prevents any single machine from being overwhelmed, and maintains performance even as servers come online or go offline.\n\nThis simulator lets you explore four routing algorithms: Round Robin cycles requests evenly, Least Connections routes to the server handling the fewest active requests, IP Hash ensures the same client always reaches the same server (session persistence), and Weighted distributes traffic proportionally to server capacity.\n\nUse the Config tab to toggle individual servers offline — watch the load balancer detect failures and reroute automatically. The Stats tab shows per-server request distribution and success rates in real time.',
     howItWorks: 'Incoming requests are routed to healthy backend servers using algorithms.',
     realWorldDetails: 'YouTube uses load balancers to handle billions of requests daily.',
     processSteps: [

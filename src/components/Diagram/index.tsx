@@ -21,7 +21,7 @@ interface DiagramProps {
   stepDur: number;
 }
 
-export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDur }: DiagramProps) {
+export function Diagram({ activeStep, doneCount: _doneCount, running: _running, onStepComplete, stepDur }: DiagramProps) {
   const wRef = useRef<HTMLDivElement>(null);
   const [sz, setSz] = useState({ w: 800, h: 400 });
   const [draggingNode, setDraggingNode] = useState<NodeId | null>(null);
@@ -126,8 +126,8 @@ export function Diagram({ activeStep, doneCount, running, onStepComplete, stepDu
           return (
             <ArrowFlow
               key={`${f}${t}`}
-              from={isActive ? (activeStep!.from as NodeId) : f}
-              to={isActive ? (activeStep!.to as NodeId) : t}
+              from={isActive ? activeStep!.from : f}
+              to={isActive ? activeStep!.to : t}
               pos={pos}
               label={isActive ? activeStep!.label : undefined}
               dot={isActive ? activeStep!.dot : undefined}

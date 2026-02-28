@@ -7,9 +7,10 @@ interface TopbarProps {
   variant?: 'landing' | 'simulator';
   conceptId?: string;
   stats?: SimStats;
+  onHelp?: () => void;
 }
 
-export function Topbar({ onBack, showBack = false, variant = 'simulator', conceptId, stats }: TopbarProps) {
+export function Topbar({ onBack, showBack = false, variant = 'simulator', conceptId, stats, onHelp }: TopbarProps) {
   const concept = conceptId ? CONCEPTS.find((c) => c.id === conceptId) : null;
 
   return (
@@ -71,8 +72,19 @@ export function Topbar({ onBack, showBack = false, variant = 'simulator', concep
             </span>
           </div>
 
+          {/* Help button */}
+          {onHelp && (
+            <button
+              onClick={onHelp}
+              title="Open guide"
+              className="w-7 h-7 mr-24 animate-pulse rounded-full border border-blue-500 bg-blue-100 text-black hover:bg-blue-200 hover:text-slate-700 flex items-center justify-center cursor-pointer transition-all shrink-0 text-code"
+              style={{ fontSize: 13, fontWeight: 700, lineHeight: 1 }}
+            >
+              ?
+            </button>
+          )}
 
-          {/* Stats */}
+          {/* Stats + Help button */}
           {stats && (
             <div className="flex items-center gap-5 shrink-0">
               {([

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import type { OperationType, CacheState, FlowStep, SimStats, LogEntry } from '../../types';
 import { makeFlow } from './flowEngine';
 import { Diagram } from '../../components/Diagram';
-import { SimulatorSidebar } from '../../components/SimulatorSidebar';
+import { CachingSidebar } from './CachingSidebar';
 
 let logIdSeq = 0;
 
@@ -137,11 +137,12 @@ export function CachingSimulator({ conceptId, onStatsUpdate, onReset }: CachingS
       </div>
 
       {/* Right sidebar */}
-      <SimulatorSidebar
+      <CachingSidebar
         conceptId={conceptId}
         op={op} rs={rs} ws={ws} cs={cs} spd={spd} running={running}
         setOp={setOp} setRs={setRs} setWs={setWs} setCs={setCs} setSpd={setSpd}
-        onRun={handleRun} onReset={handleReset}
+        onRun={handleRun}
+        onReset={handleReset}
         stats={cumulativeRef.current}
         logs={logs}
       />

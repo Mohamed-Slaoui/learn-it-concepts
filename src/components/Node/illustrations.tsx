@@ -1,68 +1,162 @@
 export function AppIllus() {
   return (
-    <svg width="60" height="56" viewBox="0 0 60 56" fill="none">
-      <rect x="3" y="4" width="40" height="27" rx="4" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2.5" />
-      <rect x="7" y="8" width="32" height="18" rx="2" fill="#bfdbfe" opacity="0.55" />
-      <circle cx="23" cy="17" r="6" fill="#eff6ff" stroke="#3b82f6" strokeWidth="1.5" />
-      <ellipse cx="23" cy="17" rx="2.8" ry="6" fill="none" stroke="#93c5fd" strokeWidth="1" />
-      <line x1="17" y1="17" x2="29" y2="17" stroke="#93c5fd" strokeWidth="1" />
-      <line x1="18" y1="12.5" x2="28" y2="12.5" stroke="#bfdbfe" strokeWidth="0.8" />
-      <line x1="18" y1="21.5" x2="28" y2="21.5" stroke="#bfdbfe" strokeWidth="0.8" />
-      <rect x="20" y="31" width="5" height="6" fill="#93c5fd" />
-      <rect x="14" y="37" width="17" height="3" rx="1.5" fill="#3b82f6" />
-      <rect x="40" y="16" width="17" height="22" rx="3" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2" />
-      <rect x="43" y="19" width="11" height="14" rx="1" fill="#bfdbfe" opacity="0.45" />
-      <circle cx="48.5" cy="36" r="1.8" fill="#3b82f6" />
+    <svg width="64" height="60" viewBox="0 0 64 60" fill="none">
+      <defs>
+        <linearGradient id="appBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#eff6ff" />
+          <stop offset="100%" stopColor="#dbeafe" />
+        </linearGradient>
+        <linearGradient id="screenBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#bfdbfe" />
+          <stop offset="100%" stopColor="#93c5fd" />
+        </linearGradient>
+      </defs>
+
+      {/* Monitor */}
+      <rect x="4" y="5" width="42" height="28" rx="6" fill="url(#appBg)" stroke="#3b82f6" strokeWidth="2.2" />
+      <rect x="9" y="10" width="32" height="18" rx="3" fill="url(#screenBg)" opacity="0.9" />
+
+      {/* Globe / Client Indicator */}
+      <circle cx="25" cy="19" r="6.5" fill="#f8fafc" stroke="#3b82f6" strokeWidth="1.8" />
+      <ellipse cx="25" cy="19" rx="3" ry="6.5" fill="none" stroke="#60a5fa" strokeWidth="1.2" />
+      <line x1="18.5" y1="19" x2="31.5" y2="19" stroke="#60a5fa" strokeWidth="1.2" />
+
+      {/* Stand */}
+      <rect x="21" y="33" width="6" height="6" rx="1.5" fill="#93c5fd" />
+      <rect x="15" y="39" width="18" height="4" rx="2" fill="#3b82f6" />
+
+      {/* Mobile device (multi-client hint) */}
+      <rect x="44" y="18" width="16" height="24" rx="4" fill="url(#appBg)" stroke="#3b82f6" strokeWidth="2" />
+      <rect x="47" y="22" width="10" height="14" rx="2" fill="#bfdbfe" opacity="0.8" />
+      <circle cx="52" cy="39" r="1.8" fill="#2563eb" />
     </svg>
   );
 }
 
 export function ServerIllus() {
   return (
-    <svg width="86" height="56" viewBox="0 0 86 56" fill="none">
-      <rect x="5" y="6" width="76" height="44" rx="5" fill="#fffbeb" stroke="#f59e0b" strokeWidth="2.5" />
-      <rect x="11" y="12" width="64" height="15" rx="3" fill="#fef3c7" stroke="#fbbf24" strokeWidth="1.5" />
-      <text x="43" y="22.5" textAnchor="middle" fontSize="10" fontWeight="700" fill="#92400e" fontFamily="Caveat,cursive">
-        Backend Server
+    <svg width="90" height="60" viewBox="0 0 90 60" fill="none">
+      <defs>
+        <linearGradient id="serverBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#fffbeb" />
+          <stop offset="100%" stopColor="#fef3c7" />
+        </linearGradient>
+      </defs>
+
+      {/* Server chassis */}
+      <rect x="6" y="6" width="78" height="48" rx="8" fill="url(#serverBg)" stroke="#f59e0b" strokeWidth="2.5" />
+
+      {/* Header panel */}
+      <rect x="14" y="13" width="62" height="16" rx="4" fill="#fde68a" stroke="#fbbf24" strokeWidth="1.5" />
+
+      {/* Clean technical label (no cursive) */}
+      <text
+        x="45"
+        y="23"
+        textAnchor="middle"
+        fontSize="10"
+        fontWeight="600"
+        fill="#92400e"
+        fontFamily="Inter, system-ui, sans-serif"
+      >
       </text>
-      <rect x="11" y="31" width="52" height="6" rx="2" fill="#fef9c3" stroke="#fcd34d" strokeWidth="1" />
-      <rect x="11" y="40" width="52" height="6" rx="2" fill="#fef9c3" stroke="#fcd34d" strokeWidth="1" />
-      <circle cx="72" cy="34" r="3" fill="#10b981" />
-      <circle cx="65" cy="34" r="3" fill="#10b981" />
-      <circle cx="72" cy="43" r="3" fill="#f59e0b" />
-      <circle cx="65" cy="43" r="3" fill="#10b981" />
+
+      {/* Processing bars */}
+      <rect x="14" y="34" width="50" height="6" rx="3" fill="#fef9c3" stroke="#fcd34d" />
+      <rect x="14" y="43" width="50" height="6" rx="3" fill="#fef9c3" stroke="#fcd34d" />
+
+      {/* Status LEDs */}
+      <circle cx="74" cy="36" r="3" fill="#10b981" />
+      <circle cx="67" cy="36" r="3" fill="#10b981" />
+      <circle cx="74" cy="45" r="3" fill="#f59e0b" />
+      <circle cx="67" cy="45" r="3" fill="#10b981" />
     </svg>
   );
 }
 
 export function CacheIllus() {
   return (
-    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-      <ellipse cx="32" cy="50" rx="22" ry="8" fill="#6ee7b7" stroke="#10b981" strokeWidth="2" />
-      <rect x="10" y="38" width="44" height="12" fill="#a7f3d0" />
-      <line x1="10" y1="38" x2="10" y2="50" stroke="#10b981" strokeWidth="2" />
-      <line x1="54" y1="38" x2="54" y2="50" stroke="#10b981" strokeWidth="2" />
-      <ellipse cx="32" cy="38" rx="22" ry="8" fill="#a7f3d0" stroke="#10b981" strokeWidth="2" />
-      <rect x="10" y="26" width="44" height="12" fill="#d1fae5" />
-      <line x1="10" y1="26" x2="10" y2="38" stroke="#10b981" strokeWidth="2" />
-      <line x1="54" y1="26" x2="54" y2="38" stroke="#10b981" strokeWidth="2" />
-      <ellipse cx="32" cy="26" rx="22" ry="8" fill="#d1fae5" stroke="#10b981" strokeWidth="2" />
-      <text x="32" y="30" textAnchor="middle" fontSize="13">⚡</text>
+    <svg width="68" height="68" viewBox="0 0 68 68" fill="none">
+      <defs>
+        <linearGradient id="cacheTop" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#d1fae5" />
+          <stop offset="100%" stopColor="#a7f3d0" />
+        </linearGradient>
+        <linearGradient id="cacheBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#a7f3d0" />
+          <stop offset="100%" stopColor="#6ee7b7" />
+        </linearGradient>
+      </defs>
+
+      {/* Bottom layer */}
+      <ellipse cx="34" cy="52" rx="23" ry="8" fill="#6ee7b7" stroke="#10b981" strokeWidth="2.2" />
+      <rect x="11" y="40" width="46" height="12" fill="url(#cacheBody)" />
+      <ellipse cx="34" cy="40" rx="23" ry="8" fill="url(#cacheBody)" stroke="#10b981" strokeWidth="2.2" />
+
+      {/* Middle layer */}
+      <rect x="11" y="28" width="46" height="12" fill="#a7f3d0" />
+      <ellipse cx="34" cy="28" rx="23" ry="8" fill="url(#cacheTop)" stroke="#10b981" strokeWidth="2.2" />
+
+      {/* Lightning icon (performance hint) */}
+      <text
+        x="34"
+        y="33"
+        textAnchor="middle"
+        fontSize="16"
+        fontWeight="700"
+        fill="#047857"
+      >
+        ⚡
+      </text>
     </svg>
   );
 }
 
 export function DBIllus() {
   return (
-    <svg width="62" height="68" viewBox="0 0 62 68" fill="none">
-      <ellipse cx="31" cy="13" rx="21" ry="7" fill="#bfdbfe" stroke="#3b82f6" strokeWidth="2" />
-      <rect x="10" y="13" width="42" height="40" fill="#dbeafe" />
-      <line x1="10" y1="13" x2="10" y2="53" stroke="#3b82f6" strokeWidth="2" />
-      <line x1="52" y1="13" x2="52" y2="53" stroke="#3b82f6" strokeWidth="2" />
-      <ellipse cx="31" cy="53" rx="21" ry="7" fill="#bfdbfe" stroke="#3b82f6" strokeWidth="2" />
-      <ellipse cx="31" cy="26" rx="21" ry="5.5" fill="none" stroke="#93c5fd" strokeWidth="1.5" strokeDasharray="4 3" />
-      <ellipse cx="31" cy="39" rx="21" ry="5.5" fill="none" stroke="#93c5fd" strokeWidth="1.5" strokeDasharray="4 3" />
-      <ellipse cx="23" cy="13" rx="5.5" ry="2.2" fill="white" opacity="0.35" />
+    <svg width="66" height="72" viewBox="0 0 66 72" fill="none">
+      <defs>
+        <linearGradient id="dbFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#eff6ff" />
+          <stop offset="100%" stopColor="#dbeafe" />
+        </linearGradient>
+      </defs>
+
+      {/* Top */}
+      <ellipse cx="33" cy="14" rx="22" ry="8" fill="#bfdbfe" stroke="#3b82f6" strokeWidth="2.2" />
+
+      {/* Body */}
+      <rect x="11" y="14" width="44" height="42" fill="url(#dbFill)" />
+      <line x1="11" y1="14" x2="11" y2="56" stroke="#3b82f6" strokeWidth="2.2" />
+      <line x1="55" y1="14" x2="55" y2="56" stroke="#3b82f6" strokeWidth="2.2" />
+
+      {/* Internal data layers (dashed = storage depth) */}
+      <ellipse
+        cx="33"
+        cy="29"
+        rx="22"
+        ry="6"
+        fill="none"
+        stroke="#60a5fa"
+        strokeWidth="1.6"
+        strokeDasharray="4 3"
+      />
+      <ellipse
+        cx="33"
+        cy="43"
+        rx="22"
+        ry="6"
+        fill="none"
+        stroke="#60a5fa"
+        strokeWidth="1.6"
+        strokeDasharray="4 3"
+      />
+
+      {/* Bottom */}
+      <ellipse cx="33" cy="56" rx="22" ry="8" fill="#bfdbfe" stroke="#3b82f6" strokeWidth="2.2" />
+
+      {/* Subtle highlight */}
+      <ellipse cx="25" cy="14" rx="6" ry="2.5" fill="white" opacity="0.35" />
     </svg>
   );
 }

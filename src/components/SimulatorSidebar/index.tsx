@@ -11,14 +11,16 @@ export interface SidebarTab {
 interface SimulatorSidebarProps {
   conceptId: string;
   running: boolean;
+  paused?: boolean;
   onRun: () => void;
+  onPause?: () => void;
   onReset: () => void;
   tabs: SidebarTab[];
   footerContent?: ReactNode;
 }
 
 export function SimulatorSidebar({
-  conceptId, running, onRun, onReset, tabs, footerContent,
+  conceptId, running, paused = false, onRun, onPause, onReset, tabs, footerContent,
 }: SimulatorSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id ?? '');
@@ -74,7 +76,7 @@ export function SimulatorSidebar({
               </button>
             </div>
 
-            {/* Run / Reset controls */}
+            {/* Run / Reset / Pause controls */}
             <div className="px-4 py-2.5 border-b border-slate-100 flex gap-2 shrink-0 bg-slate-50/60">
               <button
                 onClick={onRun}
@@ -88,11 +90,27 @@ export function SimulatorSidebar({
                   boxShadow: running ? 'none' : '0 4px 14px rgba(37,99,235,0.3)',
                 }}
               >
-                {running ? '⏳  Running…' : '▶  Run Simulation'}
+                {running ? '⏳ Running…' : paused ? '▶  Resume' : '▶  Run Simulation'}
               </button>
+              {running && onPause && (
+                <button
+                  onClick={onPause}
+                  className="px-4 py-1.75 rounded-[10px] border-none cursor-pointer transition-all heading-3"
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: 'white',
+                    background: paused ? '#d97706' : '#8b5cf6',
+                    boxShadow: '0 2px 8px rgba(139,92,246,0.2)',
+                  }}
+                  title={paused ? 'Resume simulation' : 'Pause simulation'}
+                >
+                  {paused ? '▶  Resume' : '⏸  Pause'}
+                </button>
+              )}
               <button
                 onClick={onReset}
-                disabled={running}
+                disabled={!paused}
                 className="px-3 py-1.75 rounded-[10px] border border-slate-200 bg-white text-slate-500 cursor-pointer transition-all hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed heading-3"
                 style={{ fontSize: 13, fontWeight: 600 }}
                 title="Reset"

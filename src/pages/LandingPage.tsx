@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import type React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { CONCEPTS } from '../data/conceptsList';
 import type { ConceptMeta } from '../types';
 import { Topbar } from '../layout/Topbar';
+import { ConceptIntroModal } from './ConceptIntroModal';
 
-interface LandingPageProps {
-  onSelectConcept: (concept: ConceptMeta) => void;
-}
 
 const STATS = [
   { val: '~1ms', label: 'Cache response time', sub: 'vs ~100ms from DB' },
@@ -94,7 +93,9 @@ function ConceptCard({ concept, index, onClick }: { concept: ConceptMeta; index:
   );
 }
 
-export function LandingPage({ onSelectConcept }: LandingPageProps) {
+export function LandingPage() {
+  const navigate = useNavigate();
+  const [selectedConcept, setSelectedConcept] = useState<ConceptMeta | null>(null);
   const cachingConcept = CONCEPTS.find((c) => c.id === 'caching')!;
 
   return (
@@ -162,7 +163,7 @@ export function LandingPage({ onSelectConcept }: LandingPageProps) {
           className="flex gap-[10px] justify-center flex-wrap"
         >
           <motion.button
-            onClick={() => onSelectConcept(cachingConcept)}
+            onClick={() => setSelectedConcept(cachingConcept)}
             className="px-7 py-3 rounded-xl border-none cursor-pointer text-white heading-3"
             style={{
               fontSize: 16,
@@ -234,12 +235,22 @@ export function LandingPage({ onSelectConcept }: LandingPageProps) {
 
         <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
           {CONCEPTS.map((c, i) => (
-            <ConceptCard key={c.id} concept={c} index={i} onClick={() => onSelectConcept(c)} />
+            <ConceptCard key={c.id} concept={c} index={i} onClick={() => setSelectedConcept(c)} />
           ))}
         </div>
       </div>
 
       {/* Footer */}
+      <AnimatePresence>
+        {selectedConcept && (
+          <ConceptIntroModal
+            concept={selectedConcept}
+            onStart={() => navigate(`/simulator/${selectedConcept.id}`)}
+            onBack={() => setSelectedConcept(null)}
+          />
+        )}
+      </AnimatePresence>
+
       <div className="max-w-[900px] mx-auto mt-14 px-10">
         <div className="border-t border-slate-200 pt-6 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-2">

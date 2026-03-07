@@ -72,48 +72,12 @@ export function Topbar({ onBack, showBack = false, variant = 'simulator', concep
             </span>
           </div>
 
-          {/* Help button */}
-          {onHelp && (
-            <button
-              onClick={onHelp}
-              title="Open guide"
-              className="w-7 h-7 mr-24 animate-pulse rounded-full border border-blue-500 bg-blue-100 text-black hover:bg-blue-200 hover:text-slate-700 flex items-center justify-center cursor-pointer transition-all shrink-0 text-code"
-              style={{ fontSize: 13, fontWeight: 700, lineHeight: 1 }}
-            >
-              ?
-            </button>
-          )}
 
           {/* Stats + Help button */}
-          {stats && (
-            <div className="flex items-center gap-5 shrink-0">
-              {([
-                ['Hits', stats.hits, '#10b981'],
-                ['Misses', stats.misses, '#ef4444'],
-                ['Total', stats.total, '#3b82f6'],
-                ['Last', stats.ms ? `${stats.ms}ms` : '—', '#94a3b8'],
-              ] as [string, string | number, string][]).map(([label, val, color]) => (
-                <div key={label} className="text-center leading-none">
-                  <div className="heading-2" style={{ color, lineHeight: 1 }}>
-                    {val}
-                  </div>
-                  <div className="mt-[2px] uppercase tracking-[1px] text-code text-[8px]" style={{ color: '#94a3b8' }}>
-                    {label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className='w-1/6' />
         </>
       )}
 
-      {/* Landing status dot */}
-      {variant === 'landing' && (
-        <div className="ml-auto flex items-center gap-[6px] text-[11px] text-slate-400 font-mono">
-          <div className="w-[6px] h-[6px] rounded-full bg-emerald-500" style={{ boxShadow: '0 0 6px #10b981' }} />
-          1 concept live
-        </div>
-      )}
     </header>
   );
 }

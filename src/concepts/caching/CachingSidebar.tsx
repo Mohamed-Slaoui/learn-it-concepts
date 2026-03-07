@@ -1,121 +1,92 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import type { OperationType, CacheState, SimStats, LogEntry } from '../../types';
+import type { CachingConfig, CachingEngineState } from './useCachingEngine';
 import { SimulatorSidebar } from '../../components/SimulatorSidebar';
 import { CachingConfigTab } from './tabs/Config';
 import { CachingStatsTab } from './tabs/Stats';
 import { CachingLogsTab } from './tabs/Logs';
 
-const LS_KEY = 'sysviz_seen_terms';
-
-function getSeenTerms(): Set<string> {
-  try {
-    return new Set(JSON.parse(localStorage.getItem(LS_KEY) ?? '[]'));
-  } catch {
-    return new Set();
-  }
-}
-
-function markTermSeen(term: string) {
-  const seen = getSeenTerms();
-  seen.add(term);
-  try {
-    localStorage.setItem(LS_KEY, JSON.stringify([...seen]));
-  } catch { /* ignore */ }
-}
-
 export interface CachingSidebarProps {
   conceptId: string;
-  op: OperationType;
-  rs: string;
-  ws: string;
-  cs: CacheState;
-  spd: number;
+  engineState: CachingEngineState;
   running: boolean;
-  setOp: (v: OperationType) => void;
-  setRs: (v: string) => void;
-  setWs: (v: string) => void;
-  setCs: (v: CacheState) => void;
-  setSpd: (v: number) => void;
-  onRun: () => void;
+  onStart: () => void;
+  onPause: () => void;
   onReset: () => void;
-  stats: SimStats;
-  logs: LogEntry[];
+  onSpike: () => void;
+  onClearCache: () => void;
+  onConfigChange: (patch: Partial<CachingConfig>) => void;
 }
 
 export function CachingSidebar({
-  conceptId, op, rs, ws, cs, spd, running,
-  setOp, setRs, setWs, setCs, setSpd,
-  onRun, onReset, stats, logs,
+  conceptId, engineState, running,
+  onStart, onPause, onReset, onSpike, onClearCache, onConfigChange,
 }: CachingSidebarProps) {
-  const [firstTimeHint, setFirstTimeHint] = useState<{ term: string; desc: string } | null>(null);
-  const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [spikeHint, setSpikeHint] = useState(false);
 
-  // Show a one-time hint toast on first cache hit / miss
-  useEffect(() => {
-    for (const log of logs) {
-      const triggerType = log.type === 'hit' ? 'cache-hit' : log.type === 'miss' ? 'cache-miss' : null;
-      if (!triggerType) continue;
-      const seen = getSeenTerms();
-      if (!seen.has(triggerType)) {
-        markTermSeen(triggerType);
-        const desc =
-          triggerType === 'cache-hit'
-            ? "Data was found in cache — no database trip needed. Fast! ⚡"
-            : "Data wasn't in cache — system fell back to the database. Slower, but correct.";
-        if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
-        setFirstTimeHint({
-          term: triggerType === 'cache-hit' ? '✅ Cache Hit' : '❌ Cache Miss',
-          desc,
-        });
-        hintTimerRef.current = setTimeout(() => setFirstTimeHint(null), 5000);
-        break;
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [logs.length]);
+  const handleSpike = () => {
+    onSpike();
+    setSpikeHint(true);
+    setTimeout(() => setSpikeHint(false), 4000);
+  };
 
   const tabs = [
     {
-      id: 'controls',
+      id: 'config',
       label: 'Config',
       content: (
         <CachingConfigTab
-          op={op} rs={rs} ws={ws} cs={cs} spd={spd} running={running}
-          setOp={setOp} setRs={setRs} setWs={setWs} setCs={setCs} setSpd={setSpd}
+          config={engineState.config}
+          running={running}
+          onChange={onConfigChange}
+          onSpike={handleSpike}
+          onClearCache={onClearCache}
         />
       ),
     },
     {
-      id: 'metrics',
+      id: 'stats',
       label: 'Stats',
-      content: <CachingStatsTab stats={stats} />,
+      content: (
+        <CachingStatsTab
+          cacheHits={engineState.cacheHits}
+          cacheMisses={engineState.cacheMisses}
+          totalRequests={engineState.totalRequests}
+          cacheHitRate={engineState.cacheHitRate}
+          dbQueries={engineState.dbQueries}
+          dbLoad={engineState.dbLoad}
+          avgLatencyMs={engineState.avgLatencyMs}
+          dbQueueLength={engineState.dbQueueLength}
+          cacheEnabled={engineState.config.cacheEnabled}
+        />
+      ),
     },
     {
       id: 'logs',
       label: 'Logs',
-      content: <CachingLogsTab logs={logs} running={running} />,
+      content: <CachingLogsTab logs={engineState.logs} running={running} />,
     },
   ];
 
-  const footerContent = firstTimeHint ? (
+  const footerContent = spikeHint ? (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 12 }}
         transition={{ duration: 0.25 }}
-        className="absolute bottom-4 left-3 right-3 z-50 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 shadow-lg"
+        className="absolute bottom-4 left-3 right-3 z-50 rounded-xl border border-red-100 bg-red-50 px-3 py-2.5 shadow-lg"
       >
         <div className="flex items-start gap-2">
-          <span className="text-[15px] shrink-0">👋</span>
           <div>
-            <div className="text-[11px] font-bold text-blue-700 mb-0.5">{firstTimeHint.term}</div>
-            <p className="text-[11px] text-blue-600 leading-snug text-serif">{firstTimeHint.desc}</p>
+            <div className="text-[11px] font-bold text-red-700 mb-0.5">Traffic Spike!</div>
+            <p className="text-[11px] text-red-600 leading-snug text-serif">
+              3x traffic for 5 seconds. Watch the DB load indicator!
+            </p>
           </div>
           <button
-            onClick={() => setFirstTimeHint(null)}
-            className="ml-auto text-blue-400 hover:text-blue-600 shrink-0 text-base cursor-pointer"
+            onClick={() => setSpikeHint(false)}
+            className="ml-auto text-red-400 hover:text-red-600 shrink-0 text-base cursor-pointer"
           >
             ×
           </button>
@@ -128,7 +99,9 @@ export function CachingSidebar({
     <SimulatorSidebar
       conceptId={conceptId}
       running={running}
-      onRun={onRun}
+      paused={!running && engineState.totalRequests > 0}
+      onRun={onStart}
+      onPause={onPause}
       onReset={onReset}
       tabs={tabs}
       footerContent={footerContent}
